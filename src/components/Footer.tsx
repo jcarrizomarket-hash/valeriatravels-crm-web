@@ -1,0 +1,12 @@
+export default function Footer() {
+  return (
+    <footer className="border-t border-ink/10 bg-paper-dim">
+      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-ink/60 sm:flex-row sm:items-center sm:justify-between">
+        <p>&copy; {new Date().getFullYear()} Valeria Travels CRM.</p>
+        <a href="https://valeriatravels.com" className="hover:text-gold">
+          valeriatravels.com
+        </a>
+      </div>
+    </footer>
+  );
+}
