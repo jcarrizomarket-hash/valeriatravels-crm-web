@@ -1,6 +1,7 @@
 import NavBar from "./components/NavBar";
 import Hero from "./components/Hero";
 import Problema from "./components/Problema";
+import Capturas from "./components/Capturas";
 import Funciones from "./components/Funciones";
 import ParaQuien from "./components/ParaQuien";
 import CTA from "./components/CTA";
@@ -13,6 +14,7 @@ export default function App() {
       <main>
         <Hero />
         <Problema />
+        <Capturas />
         <Funciones />
         <ParaQuien />
         <CTA />
