@@ -3,11 +3,16 @@ import { supabase } from "../lib/supabase";
 
 type Estado = "idle" | "enviando" | "ok" | "error";
 
+type TipoEntidad = "" | "empresa" | "autonomo" | "emprendedor";
+
 export default function CTA() {
   const [estado, setEstado] = useState<Estado>("idle");
   const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
+  const [tipoEntidad, setTipoEntidad] = useState<TipoEntidad>("");
+  const [cantidadEmpleados, setCantidadEmpleados] = useState("");
   const [mensaje, setMensaje] = useState("");
 
   async function onSubmit(e: FormEvent) {
@@ -17,8 +22,11 @@ export default function CTA() {
 
     const { error } = await supabase.from("leads").insert({
       nombre,
+      apellido: apellido || null,
       email,
       telefono: telefono || null,
+      tipo_entidad: tipoEntidad || null,
+      cantidad_empleados: tipoEntidad === "empresa" && cantidadEmpleados ? Number(cantidadEmpleados) : null,
       mensaje,
       origen: "crm.valeriatravels.com",
     });
@@ -37,8 +45,11 @@ export default function CTA() {
 
     setEstado("ok");
     setNombre("");
+    setApellido("");
     setEmail("");
     setTelefono("");
+    setTipoEntidad("");
+    setCantidadEmpleados("");
     setMensaje("");
   }
 
@@ -87,6 +98,15 @@ export default function CTA() {
               className="rounded-xl border border-ink/15 bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold"
             />
             <input
+              type="text"
+              placeholder="Apellido"
+              value={apellido}
+              onChange={(e) => setApellido(e.target.value)}
+              className="rounded-xl border border-ink/15 bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold"
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <input
               type="email"
               required
               placeholder="Email"
@@ -94,14 +114,36 @@ export default function CTA() {
               onChange={(e) => setEmail(e.target.value)}
               className="rounded-xl border border-ink/15 bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold"
             />
+            <input
+              type="tel"
+              placeholder="Teléfono (opcional)"
+              value={telefono}
+              onChange={(e) => setTelefono(e.target.value)}
+              className="rounded-xl border border-ink/15 bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold"
+            />
           </div>
-          <input
-            type="tel"
-            placeholder="Teléfono (opcional)"
-            value={telefono}
-            onChange={(e) => setTelefono(e.target.value)}
-            className="w-full rounded-xl border border-ink/15 bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold"
-          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <select
+              value={tipoEntidad}
+              onChange={(e) => setTipoEntidad(e.target.value as TipoEntidad)}
+              className="rounded-xl border border-ink/15 bg-paper px-4 py-3 text-sm text-ink/80 outline-none transition-colors focus:border-gold"
+            >
+              <option value="">Agencia, autónomo o emprendedor (opcional)</option>
+              <option value="empresa">Agencia / empresa</option>
+              <option value="autonomo">Autónomo</option>
+              <option value="emprendedor">Emprendedor</option>
+            </select>
+            {tipoEntidad === "empresa" && (
+              <input
+                type="number"
+                min={1}
+                placeholder="Cantidad de empleados"
+                value={cantidadEmpleados}
+                onChange={(e) => setCantidadEmpleados(e.target.value)}
+                className="rounded-xl border border-ink/15 bg-paper px-4 py-3 text-sm outline-none transition-colors focus:border-gold"
+              />
+            )}
+          </div>
           <textarea
             required
             placeholder="Contanos sobre tu agencia"
