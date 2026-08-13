@@ -29,6 +29,12 @@ export default function CTA() {
       return;
     }
 
+    // El envío del mail con el link a la demo no debe bloquear la confirmación al usuario:
+    // si Resend falla o tarda, el lead ya quedó guardado y el equipo lo puede contactar igual.
+    supabase.functions
+      .invoke("send-demo-email", { body: { nombre, email } })
+      .catch((err) => console.error("Error al enviar el mail de la demo:", err));
+
     setEstado("ok");
     setNombre("");
     setEmail("");
@@ -44,7 +50,13 @@ export default function CTA() {
             ¡Gracias por escribir!
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-ink/70">
-            Recibimos tu mensaje. Te vamos a responder a la brevedad para coordinar la demo.
+            Te acabamos de mandar un mail con el link a la demo del CRM, con datos de prueba
+            para que la explores a tu ritmo. Si no te llega en unos minutos, revisá spam o
+            escribinos a{" "}
+            <a href="mailto:info@valeriatravels.com" className="underline">
+              info@valeriatravels.com
+            </a>
+            .
           </p>
         </div>
       </section>
@@ -59,8 +71,8 @@ export default function CTA() {
             ¿Querés ver el CRM en acción?
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-ink/70">
-            Todavía estamos afinando el alta para nuevas agencias — escribinos y coordinamos
-            una demo real, con tus propios casos de uso.
+            Dejanos tus datos y te mandamos al toque el link a una cuenta demo con datos de
+            prueba, para que la explores por tu cuenta antes de coordinar una llamada.
           </p>
         </div>
 
